@@ -41,13 +41,53 @@ def main():
                 print(X*Y)
                 result = result + X*Y 
         print("Part one answear: ", result)
-        exit()
+        #exit()
+        #####################################################################
         print("PART TWO")
+        inputFile = open(fileName, 'r', encoding="utf-8")
         #solution for second part of puzzle 
-
-        #calculate result2
         result2=0
-
+        #mul(111,111)
+        p  = re.compile(r"mul\((\d{1,3}),(\d{1,3})\)")
+        #do()
+        do = re.compile(r"do\(\)")
+        #don't()
+        dont = re.compile(r"don\'t\(\)")
+        mulEnabled = True
+        doMap=list([])
+        dontMap=list([])
+        for line in inputFile:
+            doMap.clear()
+            dontMap.clear()
+            regSearchList = p.finditer(line)
+            doList = do.finditer(line)
+            dontList = dont.finditer(line)
+            for doObj in doList:
+                doMap.append(doObj.span(0)[0])
+            for dontObj in dontList:
+                dontMap.append(dontObj.span(0)[0])
+            #print(doMap, "\n", dontMap)
+            progress=0
+            for regSearch in regSearchList:
+                if doMap:
+                    for i in doMap:
+                        if regSearch.span(0)[0] > i and i > progress:
+                            mulEnabled = True
+                if dontMap:
+                    for i in dontMap:
+                        if regSearch.span(0)[0] > i and i > progress:
+                            mulEnabled = False
+                progress = regSearch.span(0)[0]
+                if mulEnabled:
+                    #print(regSearch)#print object
+                    print(regSearch.group(0), end=": ")#ex: "mul(2,4)"
+                    X = int(regSearch.group(1))#ex: 2
+                    Y = int(regSearch.group(2))#ex: 4
+                    print(X, "*", Y, end="=")
+                    print(X*Y)
+                    result2 = result2 + X*Y 
+                else:
+                    print("don't()")
         print("Part two answear: ", result2)
     else:
         print("it is not file")
