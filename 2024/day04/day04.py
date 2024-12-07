@@ -29,9 +29,8 @@ def main():
     fileName=Path(args.file)
     partExec=args.part
     if (fileName.exists() and fileName.is_file()):
-        inputFile = open(fileName, 'r', encoding="utf-8")
-        
         if partExec==0 or partExec==1:
+            inputFile = open(fileName, 'r', encoding="utf-8")
             print("PART ONE")
             #fullFile = inputFile.read()
 
@@ -97,7 +96,32 @@ def main():
             print("PART TWO")
             result=0
             #solution for second part of puzzle 
-
+            inputFile = open(fileName, 'r', encoding="utf-8")
+            #line buffers
+            lineBuf1=[]
+            lineBuf2=[]
+            #temp to normalize to horizontal form
+            tempDiagR=""
+            tempDiagL=""
+            #PROCESS FILE
+            #to find pattern
+            #M.S
+            #.A.
+            #M.S
+            for line in inputFile:
+                #print(line)
+                if lineBuf1 and lineBuf2:
+                    for i in range(0,(len(line)-2)):
+                        tempDiagR=lineBuf2[i+2]+lineBuf1[i+1]+line[i]
+                        tempDiagL=lineBuf2[i]+lineBuf1[i+1]+line[i+2]
+                        #print(tempDiagR)
+                        if (tempDiagR=="MAS" or tempDiagR=="SAM") and (tempDiagL=="MAS" or tempDiagL=="SAM"):
+                            result=result+1
+                            print("DiagR: ", tempDiagR)
+                            print("DiagL: ", tempDiagL)
+                #iterate buffers
+                lineBuf2=lineBuf1
+                lineBuf1=line
             print("Part two answear: ", result)
     else:
         print("it is not file")
