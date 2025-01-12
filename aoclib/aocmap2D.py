@@ -15,7 +15,7 @@ class CPlayer:
         self.maxRow=len(map2D)
         self.maxCol=len(map2D[0])
         #overwrite when needed
-        self.moveDir={"^":(1,0),"v":(-1,0),">":(0,1),"<":(0,-1)}
+        self.moveDir={"^":(-1,0),"v":(1,0),">":(0,1),"<":(0,-1)}
     #check if position is inside map
     def insideMap(self, simPos):
         if simPos[0]>=0 and simPos[1]>=0 and simPos[0]<self.maxRow and simPos[1]<self.maxCol:
@@ -46,6 +46,32 @@ class CPlayer:
             simPos=(self.actPos[0]+addPos[0],self.actPos[1]+addPos[1])
             outView.append(self.getValueMap(simPos))
         return outView
+
+    #get values of actual position row as a dict
+    #outView={(fromRow,0):'',....,(fromRow,mapSize[1]):''}
+    def getViewRow(self,fromRow):
+        outView={}
+        for col in range(self.maxCol):
+            outView[(fromRow,col)]=self.map2D[fromRow][col]
+        return outView
+
+    #get values of actual position col as a dict
+    #outView={(0,fromCol):'',....,(mapSize[0],fromCol):''}
+    def getViewCol(self,fromCol):
+        outView={}
+        for row in range(self.maxRow):
+            outView[(row,fromCol)]=self.map2D[row][fromCol]
+        return outView
+
+    #set the new values for elements given in form of dictionary 
+    #inputDict={(x,y):'v',...}
+    def setMapValues(self,inputDict):
+        if inputDict:
+            for key,value in inputDict.items():
+                if self.insideMap(key):
+                    self.map2D[key[0]][key[1]]=value
+                else:
+                    print("CPlayer.setMapValues class: not in map2D: ", key)
 
     #check if character is inside a actual view
     #return a list of positions relative to actual position or absolute on map

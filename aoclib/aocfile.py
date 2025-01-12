@@ -44,6 +44,20 @@ def fileToDict(filePath):
                     col += 1
             row += 1
     return outputDict
+
+#sort the file in form of dictionary map
+#output={(0,0):'a',(0,1):'b',...}
+def fileDictMap(filePath):
+    outputDict={}
+    with open(filePath, 'r', encoding="utf-8") as inputFile:
+        row=0
+        for line in inputFile:
+            col=0
+            for colChar in line:
+                if not(colChar == '\n'):
+                    outputDict[(row,col)]=colChar
+                    col += 1
+            row += 1
 def main():# {{{
     print("")
 
